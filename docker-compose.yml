@@ -1,0 +1,30 @@
+services:
+  lpr-service:
+    build: ./lpr-service
+    container_name: gate-lpr
+    restart: unless-stopped
+    env_file:
+      - ./lpr-service/.env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./lpr-service/models:/app/models:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys;sys.exit(0 if urllib.request.urlopen('http://localhost:8000/health').status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  agent:
+    build: ./agent
+    container_name: gate-agent
+    restart: unless-stopped
+    depends_on:
+      lpr-service:
+        condition: service_healthy
+    env_file:
+      - ./agent/.env
+    environment:
+      - LPR_ENDPOINT=http://lpr-service:8000/recognize
+    volumes:
+      - ./agent/data:/app/data
