@@ -164,6 +164,11 @@ alter table public.manual_actions enable row level security;
 -- משתמש מאומת רואה את הנתונים; כתיבה/עריכה רק ל-admin.
 -- הסוכן ניגש עם service_role (עוקף RLS) לכתיבת אירועים וקריאת רשימות.
 
+-- profiles: כל משתמש מאומת קורא את הפרופיל של עצמו.
+-- חיוני כדי שה-policy של admin בטבלאות האחרות תוכל לפתור את role של הקורא.
+create policy "auth read own profile" on public.profiles    for select to authenticated
+  using (id = auth.uid());
+
 create policy "auth read vehicles"  on public.vehicles      for select to authenticated using (true);
 create policy "admin write vehicles" on public.vehicles     for all to authenticated
   using ((select role from public.profiles where id = auth.uid()) = 'admin')
