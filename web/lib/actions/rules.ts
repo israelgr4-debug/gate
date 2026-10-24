@@ -26,7 +26,7 @@ function daysFromForm(formData: FormData): number[] {
 }
 
 export async function createRule(vehicleId: string, formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const rule_type = parseRuleType(formData.get('rule_type'));
   const days_of_week = rule_type === 'weekly' ? daysFromForm(formData) : [];
   const time_from = emptyOrNull(formData.get('time_from'));
@@ -60,13 +60,13 @@ export async function createRule(vehicleId: string, formData: FormData) {
 }
 
 export async function toggleRule(vehicleId: string, ruleId: string, active: boolean) {
-  const supabase = createClient();
+  const supabase = await createClient();
   await supabase.from('access_rules').update({ active }).eq('id', ruleId);
   revalidatePath(`/vehicles/${vehicleId}`);
 }
 
 export async function deleteRule(vehicleId: string, ruleId: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   await supabase.from('access_rules').delete().eq('id', ruleId);
   revalidatePath(`/vehicles/${vehicleId}`);
 }

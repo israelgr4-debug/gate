@@ -2,11 +2,10 @@ import { createVehicle } from '@/lib/actions/vehicles';
 import { VehicleForm } from '@/components/vehicle-form';
 import Link from 'next/link';
 
-export default function NewVehiclePage({
-  searchParams,
-}: {
-  searchParams: { error?: string };
+export default async function NewVehiclePage(props: {
+  searchParams: Promise<{ error?: string }>;
 }) {
+  const searchParams = await props.searchParams;
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">

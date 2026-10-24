@@ -5,12 +5,11 @@ export const dynamic = 'force-dynamic';
 
 const BUCKET = 'plate-snapshots';
 
-export default async function EventsPage({
-  searchParams,
-}: {
-  searchParams: { decision?: string; q?: string; from?: string; to?: string };
+export default async function EventsPage(props: {
+  searchParams: Promise<{ decision?: string; q?: string; from?: string; to?: string }>;
 }) {
-  const supabase = createClient();
+  const searchParams = await props.searchParams;
+  const supabase = await createClient();
   const decisionFilter = (searchParams.decision ?? '').trim() as Decision | '';
   const q = (searchParams.q ?? '').trim();
   const from = (searchParams.from ?? '').trim();

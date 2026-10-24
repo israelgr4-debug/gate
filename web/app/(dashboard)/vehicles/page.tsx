@@ -4,12 +4,11 @@ import type { Vehicle } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
-export default async function VehiclesPage({
-  searchParams,
-}: {
-  searchParams: { q?: string };
+export default async function VehiclesPage(props: {
+  searchParams: Promise<{ q?: string }>;
 }) {
-  const supabase = createClient();
+  const searchParams = await props.searchParams;
+  const supabase = await createClient();
   const q = (searchParams.q ?? '').trim();
 
   let query = supabase
