@@ -18,7 +18,7 @@
     "dotenv": "^16.4.5",
     "modbus-serial": "^8.0.20",
     "pino": "^9.4.0",
-    "undici": "^6.19.0"
+    "undici": "^6.29.1"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.11",
