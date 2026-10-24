@@ -14,7 +14,7 @@ function parseVehicleType(raw: FormDataEntryValue | null): VehicleType {
 }
 
 export async function createVehicle(formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const plate = normalizePlate(String(formData.get('plate') ?? ''));
   if (!plate) {
     redirect(`/vehicles/new?error=${encodeURIComponent('לוחית לא תקינה — נדרשות 7–8 ספרות')}`);
@@ -44,7 +44,7 @@ export async function createVehicle(formData: FormData) {
 }
 
 export async function updateVehicle(id: string, formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const plate = normalizePlate(String(formData.get('plate') ?? ''));
   if (!plate) {
     redirect(`/vehicles/${id}?error=${encodeURIComponent('לוחית לא תקינה')}`);
@@ -76,7 +76,7 @@ export async function updateVehicle(id: string, formData: FormData) {
 }
 
 export async function deleteVehicle(id: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.from('vehicles').delete().eq('id', id);
   if (error) {
     redirect(`/vehicles/${id}?error=${encodeURIComponent(error.message)}`);

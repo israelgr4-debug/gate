@@ -6,12 +6,11 @@ export const dynamic = 'force-dynamic';
 
 const OFFLINE_MS = 2 * 60 * 1000;
 
-export default async function DevicesPage({
-  searchParams,
-}: {
-  searchParams: { error?: string };
+export default async function DevicesPage(props: {
+  searchParams: Promise<{ error?: string }>;
 }) {
-  const supabase = createClient();
+  const searchParams = await props.searchParams;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('gate_devices')
     .select('*')

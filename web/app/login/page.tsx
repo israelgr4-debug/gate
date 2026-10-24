@@ -5,7 +5,7 @@ async function signIn(formData: FormData) {
   'use server';
   const email = String(formData.get('email') ?? '');
   const password = String(formData.get('password') ?? '');
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
     redirect(`/login?error=${encodeURIComponent(error.message)}`);
@@ -13,11 +13,10 @@ async function signIn(formData: FormData) {
   redirect('/vehicles');
 }
 
-export default function LoginPage({
-  searchParams,
-}: {
-  searchParams: { error?: string };
+export default async function LoginPage(props: {
+  searchParams: Promise<{ error?: string }>;
 }) {
+  const searchParams = await props.searchParams;
   return (
     <main className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-sm bg-slate-800 rounded-2xl shadow-xl p-8">

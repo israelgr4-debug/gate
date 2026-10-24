@@ -8,14 +8,13 @@ import type { Vehicle, AccessRule, AccessEvent } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
-export default async function VehicleDetailPage({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams: { error?: string };
+export default async function VehicleDetailPage(props: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ error?: string }>;
 }) {
-  const supabase = createClient();
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+  const supabase = await createClient();
   const { data: vehicle } = await supabase
     .from('vehicles')
     .select('*')
